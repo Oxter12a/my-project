@@ -18,11 +18,54 @@ if (!token) {
 }
 
 
+// Fill the form with the portfolio that was created at registration
+async function loadMyPortfolio() {
+
+    try {
+
+        const response = await fetch("/api/portfolio/mine", {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (response.status === 401) {
+
+            localStorage.removeItem("token");
+            localStorage.removeItem("user");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const mine = await response.json();
+
+        if (!mine) return;
+
+        document.getElementById("phone").value = (mine.user && mine.user.phone) || "";
+        document.getElementById("category").value = mine.category || "";
+        document.getElementById("skills").value = (mine.skills || []).join(", ");
+        document.getElementById("description").value = mine.description || "";
+        document.getElementById("portfolioLink").value = mine.portfolioLink || "";
+        document.getElementById("availability").checked = mine.availability !== false;
+
+    } catch (error) {
+
+        console.log(error);
+    }
+}
+
+loadMyPortfolio();
+
+
 form.addEventListener(
     "submit",
     async function(event) {
 
         event.preventDefault();
+
+
+        const phone =
+            document.getElementById(
+                "phone"
+            ).value.trim();
 
 
         const category =
@@ -89,6 +132,8 @@ form.addEventListener(
 
                         body:
                             JSON.stringify({
+
+                                phone,
 
                                 category,
 

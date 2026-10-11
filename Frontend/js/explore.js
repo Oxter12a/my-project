@@ -1,186 +1,60 @@
-const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
-
-
-const searchBtn =
-    document.getElementById(
-        "searchBtn"
-    );
-
-
-const results =
-    document.getElementById(
-        "results"
-    );
+const searchInput = document.getElementById("searchInput");
+const searchBtn = document.getElementById("searchBtn");
+const results = document.getElementById("results");
 
 
 async function searchStudents() {
 
-    const skill =
-        searchInput.value;
+    const skill = searchInput.value.trim();
 
+    const token = localStorage.getItem("token");
 
     try {
 
-        const response =
-            await fetch(
-                `/api/portfolio/search?skill=${encodeURIComponent(skill)}`
-            );
-
-
-        const portfolios =
-            await response.json();
-
-
-        results.innerHTML = "";
-
-
-        if (portfolios.length === 0) {
-
-            results.innerHTML =
-                "<p>No students found.</p>";
-
-            return;
-
-        }
-
-
-        portfolios.forEach(
-            portfolio => {
-
-                const student =
-                    portfolio.user;
-
-
-                const skills =
-                    portfolio.skills
-                        .map(
-                            skill =>
-                                `<span>${skill}</span>`
-                        )
-                        .join("");
-
-
-                const card =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                card.className =
-                    "student-card";
-
-
-                card.innerHTML = `
-
-                    <div class="student-top">
-
-                        <div class="student-avatar">
-                            👨‍💻
-                        </div>
-
-                        <span class="status">
-
-                            ${
-                                portfolio.availability
-                                ? "Available"
-                                : "Unavailable"
-                            }
-
-                        </span>
-
-                    </div>
-
-
-                    <h3>
-                        ${student.name}
-                    </h3>
-
-
-                    <p class="department">
-
-                        ${student.department || ""}
-                        •
-                        ${student.semester || ""}
-
-                    </p>
-
-
-                    <h4>
-                        ${portfolio.category}
-                    </h4>
-
-
-                    <div class="student-skills">
-
-                        ${skills}
-
-                    </div>
-
-
-                    <p>
-
-                        ${portfolio.description}
-
-                    </p>
-
-
-                    <br>
-
-
-                    ${
-                        portfolio.portfolioLink
-                        ?
-                        `<a
-                            href="${portfolio.portfolioLink}"
-                            target="_blank"
-                            class="profile-btn">
-                            View Portfolio
-                        </a>`
-                        :
-                        ""
-                    }
-
-
-                    <br>
-
-
-                    <a
-                        href="mailto:${student.email}"
-                        class="profile-btn">
-
-                        Contact
-
-                    </a>
-
-                `;
-
-
-                results.appendChild(card);
-
+        const response = await fetch(
+            `/api/portfolio/search?skill=${encodeURIComponent(skill)}`,
+            {
+                headers: token ? { "Authorization": `Bearer ${token}` } : {}
             }
         );
 
-    }
+        const portfolios = await response.json();
 
-    catch (error) {
+        if (!response.ok) {
+            results.innerHTML = `<p class="empty-note">${esc(portfolios.message || "Unable to search.")}</p>`;
+            return;
+        }
+
+        if (portfolios.length === 0) {
+
+            results.innerHTML = `<p class="empty-note">No students found.</p>`;
+            return;
+        }
+
+        results.innerHTML =
+            portfolios
+                .map(p => renderStudentCard(p, { full: true }))
+                .join("");
+
+    } catch (error) {
 
         console.log(error);
 
-        results.innerHTML =
-            "<p>Unable to search.</p>";
-
+        results.innerHTML = `<p class="empty-note">Unable to search.</p>`;
     }
-
 }
 
 
-searchBtn.addEventListener(
-    "click",
-    searchStudents
-);
+searchBtn.addEventListener("click", searchStudents);
 
+searchInput.addEventListener("keydown", event => {
+    if (event.key === "Enter") searchStudents();
+});
+
+
+// explore.html?skill=Video%20Editing  (from the home page category cards)
+const presetSkill = new URLSearchParams(window.location.search).get("skill");
+
+if (presetSkill) searchInput.value = presetSkill;
 
 searchStudents();

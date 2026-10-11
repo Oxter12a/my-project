@@ -3,6 +3,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/User");
+const Portfolio = require("../models/Portfolio");
+const CATEGORIES = require("../config/categories");
+const cleanPhone = require("../utils/phone");
 
 const router = express.Router();
 
@@ -13,66 +16,91 @@ const router = express.Router();
 
 router.post("/register", async (req, res) => {
 
+    let user = null;
+
     try {
 
-        const {
-            name,
-            email,
-            password,
-            department,
-            semester
-        } = req.body;
+        const name = String(req.body.name || "").trim();
+        const email = String(req.body.email || "").trim().toLowerCase();
+        const password = String(req.body.password || "");
+        const category = String(req.body.category || "").trim();
+        const department = String(req.body.department || "").trim();
+        const semester = String(req.body.semester || "").trim();
+        const phone = cleanPhone(req.body.phone);
 
 
         if (!name || !email || !password) {
 
             return res.status(400).json({
-                message:
-                    "Name, email and password are required"
+                message: "Name, email and password are required"
+            });
+
+        }
+
+        if (password.length < 6) {
+
+            return res.status(400).json({
+                message: "Password must be at least 6 characters"
+            });
+
+        }
+
+        if (!phone) {
+
+            return res.status(400).json({
+                message: "Please enter a valid phone number"
+            });
+
+        }
+
+        if (!CATEGORIES.includes(category)) {
+
+            return res.status(400).json({
+                message: "Please select a valid skill category"
             });
 
         }
 
 
-        const existingUser =
-            await User.findOne({ email });
-
+        const existingUser = await User.findOne({ email });
 
         if (existingUser) {
 
-            return res.status(400).json({
-                message:
-                    "Email is already registered"
+            return res.status(409).json({
+                message: "Email is already registered"
             });
 
         }
 
 
-        const hashedPassword =
-            await bcrypt.hash(password, 10);
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        user = await User.create({
+            name,
+            email,
+            password: hashedPassword,
+            department,
+            semester,
+            phone
+        });
 
 
-        const user =
-            await User.create({
-
-                name,
-
-                email,
-
-                password: hashedPassword,
-
-                department,
-
-                semester
-
-            });
+        // Creating the portfolio is what adds the student to the
+        // category count (1 student = 1 portfolio = counted once).
+        await Portfolio.create({
+            user: user._id,
+            category
+        });
 
 
         res.status(201).json({
-
-            message:
-                "Registration successful"
-
+            message: "Registration successful",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                category
+            }
         });
 
     }
@@ -81,11 +109,21 @@ router.post("/register", async (req, res) => {
 
         console.log(error);
 
+        // do not leave a half-created student behind
+        if (user) {
+            await User.deleteOne({ _id: user._id }).catch(() => {});
+        }
+
+        if (error.code === 11000) {
+
+            return res.status(409).json({
+                message: "Email is already registered"
+            });
+
+        }
+
         res.status(500).json({
-
-            message:
-                "Registration failed"
-
+            message: "Registration failed"
         });
 
     }
@@ -101,10 +139,11 @@ router.post("/login", async (req, res) => {
 
     try {
 
-        const {
-            email,
-            password
-        } = req.body;
+        const email =
+            String(req.body.email || "").trim().toLowerCase();
+
+        const password =
+            String(req.body.password || "");
 
 
         const user =

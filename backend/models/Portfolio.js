@@ -2,10 +2,12 @@ const mongoose = require("mongoose");
 
 const portfolioSchema = new mongoose.Schema(
     {
+        // one portfolio per student -> a student is counted only once
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: "User",
-            required: true
+            required: true,
+            unique: true
         },
 
         category: {
@@ -33,14 +35,11 @@ const portfolioSchema = new mongoose.Schema(
             default: true
         }
     },
-
     {
         timestamps: true
     }
 );
 
-module.exports =
-    mongoose.model(
-        "Portfolio",
-        portfolioSchema
-    );
+portfolioSchema.index({ category: 1 });
+
+module.exports = mongoose.model("Portfolio", portfolioSchema);

@@ -7,7 +7,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>SkillConnect | Student Skill Showcase</title>
+    <title>CampusConnect | Student Skill Showcase</title>
 
     <link rel="stylesheet" href="css/style.css">
 </head>
@@ -30,7 +30,7 @@
 
                 <a href="#">Home</a>
                 
-                <a href="#">About</a>
+                <a href="#about">About</a>
 
             </nav>
 
@@ -83,7 +83,7 @@
                             Create Your Portfolio →
                         </a>
 
-                        <a href="#" class="secondary-btn">
+                        <a href="explore.html" class="secondary-btn">
                             Find Talent
                         </a>
 
@@ -94,39 +94,9 @@
 
                 <!-- Hero visual -->
 
-                <div class="hero-card">
+                <div class="hero-card" id="heroCard">
 
-                    <div class="profile-preview">
-
-                        <div class="profile-image">
-                            👨‍💻
-                        </div>
-
-                        <h3>kishor</h3>
-
-                        <p>
-                            Information Technology • S5
-                        </p>
-
-                        <div class="skills">
-
-                            <span>Video Editing</span>
-                            <span>UI/UX</span>
-                            <span>Figma</span>
-
-                        </div>
-
-                        <div class="profile-bottom">
-
-                            <span>⭐ 4.8</span>
-
-                            <span class="available">
-                                ● Available
-                            </span>
-
-                        </div>
-
-                    </div>
+                    <!-- filled by js/index.js -->
 
                 </div>
 
@@ -159,98 +129,35 @@
                 </div>
 
 
-                <div class="skill-grid">
+                <a class="skill-card" href="explore.html?skill=Video%20Editing">
+                    <h3>Video Editing</h3>
+                    <p><span id="video-editing-count">0</span> Students</p>
+                </a>
 
-                    <div class="skill-card">
+                <a class="skill-card" href="explore.html?skill=UI/UX%20Design">
+                    <h3>UI/UX Design</h3>
+                    <p><span id="uiux-count">0</span> Students</p>
+                </a>
 
-                        <div class="skill-icon">
-                            🎬
-                        </div>
+                <a class="skill-card" href="explore.html?skill=Web%20Development">
+                    <h3>Web Development</h3>
+                    <p><span id="web-development-count">0</span> Students</p>
+                </a>
 
-                        <h3>Video Editing</h3>
+                <a class="skill-card" href="explore.html?skill=Photography">
+                    <h3>Photography</h3>
+                    <p><span id="photography-count">0</span> Students</p>
+                </a>
 
-                        <p>
-                            24 Students
-                        </p>
+                <a class="skill-card" href="explore.html?skill=Content%20Writing">
+                    <h3>Content Writing</h3>
+                    <p><span id="content-writing-count">0</span> Students</p>
+                </a>
 
-                    </div>
-
-
-                    <div class="skill-card">
-
-                        <div class="skill-icon">
-                            🎨
-                        </div>
-
-                        <h3>UI/UX Design</h3>
-
-                        <p>
-                            18 Students
-                        </p>
-
-                    </div>
-
-
-                    <div class="skill-card">
-
-                        <div class="skill-icon">
-                            💻
-                        </div>
-
-                        <h3>Web Development</h3>
-
-                        <p>
-                            32 Students
-                        </p>
-
-                    </div>
-
-
-                    <div class="skill-card">
-
-                        <div class="skill-icon">
-                            📷
-                        </div>
-
-                        <h3>Photography</h3>
-
-                        <p>
-                            15 Students
-                        </p>
-
-                    </div>
-
-
-                    <div class="skill-card">
-
-                        <div class="skill-icon">
-                            ✍️
-                        </div>
-
-                        <h3>Content Writing</h3>
-
-                        <p>
-                            21 Students
-                        </p>
-
-                    </div>
-
-
-                    <div class="skill-card">
-
-                        <div class="skill-icon">
-                            📢
-                        </div>
-
-                        <h3>Marketing</h3>
-
-                        <p>
-                            12 Students
-                        </p>
-
-                    </div>
-
-                </div>
+                <a class="skill-card" href="explore.html?skill=Marketing">
+                    <h3>Marketing</h3>
+                    <p><span id="marketing-count">0</span> Students</p>
+                </a>
 
             </div>
 
@@ -277,126 +184,16 @@
 
                     </div>
 
-                    <a href="#" class="view-all">
+                    <a href="explore.html" class="view-all">
                         View all →
                     </a>
 
                 </div>
 
 
-                <div class="student-grid">
+                <div class="student-grid" id="featuredStudents">
 
-
-                    <!-- Student 1 -->
-
-                    <div class="student-card">
-
-                        <div class="student-top">
-
-                            <div class="student-avatar">
-                                👨‍💻
-                            </div>
-
-                            <span class="status">
-                                Available
-                            </span>
-
-                        </div>
-
-                        <h3>Rahul Kumar</h3>
-
-                        <p class="department">
-                            Computer Science • S6
-                        </p>
-
-                        <div class="student-skills">
-
-                            <span>Video Editing</span>
-                            <span>Premiere Pro</span>
-                            <span>After Effects</span>
-
-                        </div>
-
-                        <a href="#" class="profile-btn">
-                            View Portfolio
-                        </a>
-
-                    </div>
-
-
-                    <!-- Student 2 -->
-
-                    <div class="student-card">
-
-                        <div class="student-top">
-
-                            <div class="student-avatar">
-                                👩‍🎨
-                            </div>
-
-                            <span class="status">
-                                Available
-                            </span>
-
-                        </div>
-
-                        <h3>Anjali Nair</h3>
-
-                        <p class="department">
-                            Information Technology • S5
-                        </p>
-
-                        <div class="student-skills">
-
-                            <span>UI/UX Design</span>
-                            <span>Figma</span>
-                            <span>Illustrator</span>
-
-                        </div>
-
-                        <a href="#" class="profile-btn">
-                            View Portfolio
-                        </a>
-
-                    </div>
-
-
-                    <!-- Student 3 -->
-
-                    <div class="student-card">
-
-                        <div class="student-top">
-
-                            <div class="student-avatar">
-                                👨‍💻
-                            </div>
-
-                            <span class="status">
-                                Available
-                            </span>
-
-                        </div>
-
-                        <h3>Arjun S</h3>
-
-                        <p class="department">
-                            Electronics • S4
-                        </p>
-
-                        <div class="student-skills">
-
-                            <span>Web Development</span>
-                            <span>JavaScript</span>
-                            <span>Node.js</span>
-
-                        </div>
-
-                        <a href="#" class="profile-btn">
-                            View Portfolio
-                        </a>
-
-                    </div>
-
+                    <!-- filled by js/index.js -->
 
                 </div>
 
@@ -404,7 +201,48 @@
 
         </section>
 
+        <!-- ================= ABOUT ================= -->
 
+        <section class="about-section" id="about">
+            <div class="container">
+
+                <div class="section-heading">
+                    <p class="section-label">ABOUT US</p>
+                    <h2>About CampusConnect</h2>
+                    <p>
+                        CampusConnect is a skill showcase platform where college
+                        students create portfolios, show what they can do and get
+                        discovered by their college community.
+                    </p>
+                </div>
+
+                <h3 class="team-title">Developer Team</h3>
+
+                <div class="team-grid">
+                    <div class="team-card">
+                        <div class="team-avatar">K</div>
+                        <h4>Kishor</h4>
+                        
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">A</div>
+                        <h4>Ayan Alesh</h4>
+                        
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">A</div>
+                        <h4>Adnan</h4>
+                        
+                    </div>
+                    <div class="team-card">
+                        <div class="team-avatar">S</div>
+                        <h4>Shahabas</h4>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </section>
         <!-- ================= CTA ================= -->
 
         <section class="cta-section">
@@ -420,7 +258,7 @@
                     college community discover you.
                 </p>
 
-                <a href="#" class="primary-btn">
+                <a href="register.html" class="primary-btn">
                     Create Your Portfolio →
                 </a>
 
@@ -440,7 +278,7 @@
             <div>
 
                 <a href="#" class="logo">
-                    Skill<span>Connect</span>
+                    Campus<span>Connect</span>
                 </a>
 
                 <p>
@@ -466,6 +304,8 @@
 
 
     <script src="js/script.js"></script>
+    <script src="js/common.js"></script>
+    <script src="js/index.js"></script>
 
 </body>
 

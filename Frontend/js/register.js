@@ -1,111 +1,50 @@
-const form =
-    document.getElementById(
-        "registerForm"
-    );
+const form = document.getElementById("registerForm");
 
+form.addEventListener("submit", async function (event) {
 
-form.addEventListener(
-    "submit",
-    async function(event) {
+    event.preventDefault();
 
-        event.preventDefault();
+    const button = form.querySelector("button[type=submit]");
 
+    const payload = {
+        name: document.getElementById("name").value.trim(),
+        email: document.getElementById("email").value.trim(),
+        phone: document.getElementById("phone").value.trim(),
+        password: document.getElementById("password").value,
+        department: document.getElementById("department").value.trim(),
+        semester: document.getElementById("semester").value.trim(),
+        category: document.getElementById("category").value
+    };
 
-        const name =
-            document.getElementById(
-                "name"
-            ).value;
+    button.disabled = true;
 
-        const email =
-            document.getElementById(
-                "email"
-            ).value;
+    try {
 
-        const password =
-            document.getElementById(
-                "password"
-            ).value;
+        const response = await fetch("/api/auth/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
 
-        const department =
-            document.getElementById(
-                "department"
-            ).value;
+        const data = await response.json();
 
-        const semester =
-            document.getElementById(
-                "semester"
-            ).value;
+        if (!response.ok) {
 
-
-        try {
-
-            const response =
-                await fetch(
-                    "/api/auth/register",
-                    {
-
-                        method: "POST",
-
-                        headers: {
-
-                            "Content-Type":
-                                "application/json"
-
-                        },
-
-                        body:
-                            JSON.stringify({
-
-                                name,
-
-                                email,
-
-                                password,
-
-                                department,
-
-                                semester
-
-                            })
-
-                    }
-                );
-
-
-            const data =
-                await response.json();
-
-
-            if (response.ok) {
-
-                alert(
-                    "Registration successful!"
-                );
-
-                window.location.href =
-                    "login.html";
-
-            }
-
-            else {
-
-                alert(
-                    data.message
-                );
-
-            }
-
+            alert(data.message);
+            button.disabled = false;
+            return;
         }
 
-        catch (error) {
+        alert("Registration successful! Please login.");
 
-            console.log(error);
+        window.location.href = "login.html";
 
-            alert(
-                "Server connection failed"
-            );
+    } catch (error) {
 
-        }
+        console.error("Registration error:", error);
 
+        alert("Server connection failed");
+
+        button.disabled = false;
     }
-);
+});

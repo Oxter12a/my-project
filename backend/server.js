@@ -1,27 +1,14 @@
 const express = require("express");
-const mongoose = require("mongoose");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const path = require("path");
 
-dotenv.config();
+dotenv.config();                       // must run before connectDB()
+
+const connectDB = require("./config/db");
+connectDB();
 
 const app = express();
-
-
-// ===============================
-// DATABASE
-// ===============================
-
-mongoose
-    .connect(process.env.MONGO_URI)
-    .then(() => {
-        console.log("MongoDB connected successfully");
-    })
-    .catch((error) => {
-        console.log("MongoDB connection failed:");
-        console.log(error.message);
-    });
 
 
 // ===============================
@@ -41,20 +28,18 @@ app.use(express.urlencoded({
 // API ROUTES
 // ===============================
 
-app.use(
-    "/api/auth",
-    require("./routes/authRoutes")
-);
+app.use("/api/auth", require("./routes/authRoutes"));
 
-app.use(
-    "/api/portfolio",
-    require("./routes/portfolioRoutes")
-);
+app.use("/api/portfolio", require("./routes/portfolioRoutes"));
 
-app.use(
-    "/api/admin",
-    require("./routes/adminRoutes")
-);
+app.use("/api/categories", require("./routes/categoryRoutes"));
+
+app.use("/api/admin", require("./routes/adminRoutes"));
+
+// unknown /api/... address -> JSON instead of an HTML page
+app.use("/api", (req, res) => {
+    res.status(404).json({ message: "API route not found" });
+});
 
 
 // ===============================
@@ -67,18 +52,10 @@ app.use(
     )
 );
 
-
-// ===============================
-// HOME
-// ===============================
-
 app.get("/", (req, res) => {
 
     res.sendFile(
-        path.join(
-            __dirname,
-            "../Frontend/index.html"
-        )
+        path.join(__dirname, "../Frontend/index.html")
     );
 
 });
@@ -88,8 +65,7 @@ app.get("/", (req, res) => {
 // SERVER
 // ===============================
 
-const PORT =
-    process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
 
